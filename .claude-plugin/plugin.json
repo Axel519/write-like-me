@@ -1,0 +1,11 @@
+{
+  "name": "write-like-me",
+  "version": "0.1.0",
+  "description": "Learns your writing style from GitHub, Jira, Confluence, or local docs and makes Claude write comments, docs, and PR text like you",
+  "author": {
+    "name": "Axel Jacobo",
+    "email": "axel.jacobo519@gmail.com"
+  },
+  "license": "MIT",
+  "keywords": ["writing", "style", "humanizer", "github", "atlassian", "jira", "confluence"]
+}
