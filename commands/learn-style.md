@@ -16,7 +16,7 @@ Check each source below and collect the available ones:
   - Token set but config missing, and the arguments contain an Atlassian URL (e.g. `https://acme.atlassian.net/browse/PROJ-1`): one-time setup. Take the URL's scheme+host as `site`, ask the user for their Atlassian account email, then verify credentials with `curl -sfS -K - <<< "user = \"EMAIL:$ATLASSIAN_TOKEN\"" "SITE/rest/api/3/myself"`. On success, `mkdir -p ~/.claude/write-like-me` and save `{"site": "...", "email": "..."}` to `~/.claude/write-like-me/atlassian.json`. On failure, show the curl error and skip Atlassian.
   - Token set but no URL ever given: tell the user — "Pass your Jira or Confluence URL once so I can save your site, e.g. `/learn-style https://yourcompany.atlassian.net`" — and continue without Atlassian.
   - Token unset: skip Atlassian silently.
-- **Local files** — available if the arguments contain a folder path that exists.
+- **Local files / git repo** — available if the arguments contain a folder path that exists. A git repo additionally yields the user's own commit messages.
 
 If **no** source is available, print what to set up and stop:
 - GitHub: run `gh auth login`
@@ -69,9 +69,18 @@ curl -sfS -K - <<< "user = \"$EMAIL:$ATLASSIAN_TOKEN\"" "$SITE/wiki/rest/api/con
 
 Strip the XML/HTML tags from each `body.storage.value` to get plain text. Register: Docs & long-form.
 
-### Local files
+### Local files / git repo
 
 Read `.md` and `.txt` files from the given folder (recursively, skip anything over 50 files — take the 50 most recently modified). Register: Docs & long-form.
+
+If the folder is a git repo, also sample the user's own commit messages:
+
+```bash
+FOLDER=<path>
+git -C "$FOLDER" log --no-merges --author="$(git -C "$FOLDER" config user.email)" --format='%B%x00' -n 50
+```
+
+Bodies are NUL-separated — split on `\0`. If that yields fewer than 5 (the repo uses a different commit email), re-run without `--author` and keep only messages whose voice plausibly matches. Register: Code comments & commit messages. If every message carries a conventional-commit prefix (`feat:`, `fix:`), that's a mandated format, not personal voice — judge the wording after the prefix.
 
 ## 3. Distill the profile
 
