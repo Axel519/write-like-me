@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "write-like-me",
+  "description": "Make Claude write code, comments, and docs in your voice, learned from your real writing.",
+  "owner": {
+    "name": "Axel Jacobo",
+    "url": "https://github.com/Axel519"
+  },
+  "plugins": [
+    {
+      "name": "write-like-me",
+      "description": "Learns your writing style from GitHub, Jira, Confluence, or local docs and makes Claude write comments, docs, and PR text like you.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}
